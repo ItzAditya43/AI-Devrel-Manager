@@ -182,7 +182,7 @@ This project is licensed under the **MIT License**. Use freely, modify proudly.
 
 ## 🙌 Credits
 
-Built with ❤️ by \[Adi Pandey] using:
+Built with:
 
 * [Streamlit](https://streamlit.io/)
 * [TinyLLaMA via Hugging Face Spaces](https://huggingface.co/spaces)
