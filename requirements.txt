@@ -6,3 +6,4 @@ matplotlib
 python-dotenv
 ollama
 scikit-learn
+ddgs

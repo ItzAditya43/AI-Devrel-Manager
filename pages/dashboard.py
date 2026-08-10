@@ -430,5 +430,5 @@ try:
                     st.markdown(formatted_ctx, unsafe_allow_html=True) 
 
             st.markdown("</div>", unsafe_allow_html=True)
-except Exception as e:
+except Exception:
     st.warning("⚠️ Could not sort by created_at. Make sure your data includes that field in ISO format.")

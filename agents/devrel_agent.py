@@ -1,5 +1,4 @@
 import os
-import time
 import requests
 from dotenv import load_dotenv
 import logging
@@ -9,8 +8,11 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Use the working endpoint from debug results
-OLLAMA_API_URL = "https://aditya69690-100-hack.hf.space/api/generate"
+OLLAMA_API_URL = os.getenv(
+    "OLLAMA_API_URL", "https://aditya69690-100-hack.hf.space/api/generate"
+)
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 
 def recommend_devrel_action(issue, model="tinyllama", min_word_count=8):
     """
@@ -36,6 +38,34 @@ Provide a concrete suggestion that includes:
 Keep response under 120 words but complete the thought.
 
 DevRel Action:"""
+
+    def call_groq(prompt_text):
+        try:
+            response = requests.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {GROQ_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": GROQ_MODEL,
+                    "messages": [{"role": "user", "content": prompt_text}],
+                    "temperature": 0.4,
+                    "max_tokens": 200,
+                },
+                timeout=30,
+            )
+            response.raise_for_status()
+            content = response.json()["choices"][0]["message"]["content"].strip()
+            return content if len(content.split()) >= 8 else ""
+        except Exception as e:
+            logger.warning(f"Groq call failed: {e}")
+            return ""
+
+    if GROQ_API_KEY:
+        result = call_groq(prompt)
+        if result:
+            return result
 
     def call_llm(prompt_text, attempt):
         try:

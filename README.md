@@ -1,6 +1,6 @@
 # 🚀 DevRel AI Assistant
 
-Let AI analyze GitHub issues and suggest high-impact DevRel actions — powered by TinyLLaMA and real-time web search.
+Let AI analyze GitHub issues and suggest high-impact DevRel actions — powered by TinyLLaMA and free real-time web search (DuckDuckGo).
 
 <p align="center">
   <img src="https://img.shields.io/badge/Built%20with-Streamlit-ff4b4b?logo=streamlit&logoColor=white" alt="Streamlit Badge"/>
@@ -15,7 +15,7 @@ Let AI analyze GitHub issues and suggest high-impact DevRel actions — powered 
 **DevRel AI Assistant** is an LLM-powered tool to streamline Developer Relations workflows by analyzing GitHub issues from any public repository. It provides:
 
 - 🧠 **LLM-based Issue Classification** via **TinyLLaMA on Hugging Face Spaces**
-- 🌐 **Web Contextual Insights** from Tavily API
+- 🌐 **Web Contextual Insights** from DuckDuckGo (free, no API key required)
 - 💡 **Concrete DevRel Suggestions** (under 120 words)
 - 📊 **Interactive Dashboard** to explore, filter, and export insights
 - 📥 **Downloadable Reports** in JSON, CSV, and Markdown formats
@@ -62,17 +62,22 @@ cd devrel-ai-assistant
 
 ```bash
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
-### 3. Set Tavily API Key
+### 3. Set Your GitHub Token
 
-Add this to your `.env` or `.streamlit/secrets.toml`:
+Add to `.env` or `.streamlit/secrets.toml`:
 
 ```
-TAVILY_API_KEY=your_key_here
+GITHUB_TOKEN=your_token_here
 ```
 
-### 4. Set LLM Endpoint (Optional)
+### 4. Web Search (Free, No Key Required)
+
+Web context enrichment uses **DuckDuckGo** by default via the `ddgs` package — no API key needed. Set `USE_WEB_SEARCH=false` in `.env` to disable it, or optionally set `TAVILY_API_KEY` as a fallback provider if DuckDuckGo is ever unavailable.
+
+### 5. Set LLM Endpoint (Optional)
 
 The app uses this endpoint to call TinyLLaMA:
 
@@ -80,9 +85,9 @@ The app uses this endpoint to call TinyLLaMA:
 OLLAMA_API_URL=https://aditya69690-100-hack.hf.space/api/generate
 ```
 
-You can set this in your `.env`.
+You can override this in your `.env` to point at your own hosted model.
 
-### 5. Launch the App
+### 6. Launch the App
 
 ```bash
 streamlit run main.py
